@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import render from 'react-dom';
+import React, {Component} from 'react';
 import store from './redux/store/store';
 import constants from './redux/constants/constants';
+import App from './App';
 
-class AppContainer extends Component{
+export default class AppContainer extends Component{
     constructor(...args){
         super(...args);
         store.dispatch({type:constants.CREATE_ACCOUNT});
@@ -19,4 +19,11 @@ class AppContainer extends Component{
     componentWillUnmount(){
         this.unsubscribe();
     }
-}
+
+    render () {
+        return(<App balance={store.getState().balance}
+                onDeposit={amount => store.dispatch({type:constants.DEPOSIT_INTO_ACCOUNT, amount:amount})}
+                onWithdraw={amount=> store.dispatch({type:constants.WITHDRAW_FROM_ACCOUNT, amount:amount}) }/>);
+    }
+
+};

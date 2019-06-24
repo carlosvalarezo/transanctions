@@ -4,19 +4,17 @@ const initialState = {
     balance: 0
 }
 
-const reducer = (state, payload) => {
+const reducer = (state = initialState, payload) => {
 
-    console.log(payload.action);
-    const {type} = payload.action;
-    const {data} = payload;
+    const {type, amount} = payload;
 
     switch(type){
         case constants.CREATE_ACCOUNT:
             return initialState;
         case constants.DEPOSIT_INTO_ACCOUNT:
-            return {balance: state.balance + data.amount}
+            return {balance: state.balance + amount}
         case constants.WITHDRAW_FROM_ACCOUNT:
-            return {balance: state.balance - data.amount}
+            return {balance: state.balance - amount}
         default:
             return state;
 
