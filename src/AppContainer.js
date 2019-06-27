@@ -1,29 +1,19 @@
-import React, {Component} from 'react';
-import store from './redux/store/store';
-import constants from './redux/constants/constants';
+import { connect } from 'react-redux';
 import App from './App';
+import actionCreator from './redux/actions/actionCreator';
 
-export default class AppContainer extends Component{
-    constructor(...args){
-        super(...args);
-        store.dispatch({type:constants.CREATE_ACCOUNT});
-        this.state = {
-            balance: store.getState().balance
-        }
+const mapStateToProps = (state) => {
+    return {
+        balance: state.balance
     }
+}
 
-    componentDidMount(){
-        this.unsubscribe = store.subscribe(() => this.setState({balance: store.getState().balance}));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onDeposit: amount => dispatch(actionCreator.depositIntoAccount(amount)),
+        onWithdraw: amount => dispatch(actionCreator.withDrawFromAccount(amount))
     }
+}
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
 
-    componentWillUnmount(){
-        this.unsubscribe();
-    }
-
-    render () {
-        return(<App balance={store.getState().balance}
-                onDeposit={amount => store.dispatch({type:constants.DEPOSIT_INTO_ACCOUNT, amount:amount})}
-                onWithdraw={amount=> store.dispatch({type:constants.WITHDRAW_FROM_ACCOUNT, amount:amount}) }/>);
-    }
-
-};
+export default AppContainer;
